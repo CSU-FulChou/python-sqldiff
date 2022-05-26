@@ -51,7 +51,7 @@ def get_table(connection, database):
     """
     cursor_table = connection.cursor(dictionary=True)
     query_table = "SELECT * FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '%s' " \
-                         "ORDER BY `TABLE_NAME` ASC" % database
+                  "ORDER BY `TABLE_NAME` ASC" % database
     cursor_table.execute(query_table)
     table_data_list = cursor_table.fetchall()
     if cursor_table.rowcount <= 0:
@@ -81,9 +81,9 @@ def get_column(connection, database, table_name):
     cursor_column = connection.cursor(dictionary=True)
 
     query_column = "SELECT * FROM `information_schema`.`COLUMNS` " \
-                          "WHERE `TABLE_SCHEMA` = '%s' AND `TABLE_NAME` = '%s' " \
-                          "ORDER BY `ORDINAL_POSITION` ASC" % \
-                          (database, table_name)
+                   "WHERE `TABLE_SCHEMA` = '%s' AND `TABLE_NAME` = '%s' " \
+                   "ORDER BY `ORDINAL_POSITION` ASC" % \
+                   (database, table_name)
 
     cursor_column.execute(query_column)
 
@@ -107,8 +107,8 @@ def get_statistic_t(connection, database, table_name):
     cursor_statistic = connection.cursor(dictionary=True)
 
     query_statistic = "SELECT * FROM `information_schema`.`STATISTICS` " \
-                             "WHERE `TABLE_SCHEMA` = '%s' AND `TABLE_NAME` = '%s'" % \
-                             (database, table_name)
+                      "WHERE `TABLE_SCHEMA` = '%s' AND `TABLE_NAME` = '%s'" % \
+                      (database, table_name)
 
     cursor_statistic.execute(query_statistic)
     statistic_data_t = cursor_statistic.fetchall()
@@ -139,10 +139,15 @@ def get_statistics(statistic_data_t):
 @click.option("--db", required=True, help="指定数据库。(格式: <source_db>:<target_db>)")
 @click.pass_context
 def mysqldiff(ctx, source, target, db):
-    """差异 数据库结构差异(target 2 source) 工具
+    """
+    数据库结构差异(target 2 source) 工具
+
     :param source :输入指定源服务器(格式: <user>:<password>@<host>:<port>)
+
     :param target :输入指定目标服务器(格式: <user>:<password>@<host>:<port>)
+
     :param db     :指定数据库(格式: <source_db>:<target_db>)
+
     输出 diff 以及 alter 具体语句
     """
     source_connection = None
@@ -282,10 +287,10 @@ def mysqldiff(ctx, source, target, db):
                         # drop index for index name
                         for target_index_name, target_statistic in target_statistics.items():
                             if target_index_name not in source_statistics:
-                                    if 'PRIMARY' == target_index_name:
-                                        alter_keys.append("  DROP PRIMARY KEY")
-                                    else:
-                                        alter_keys.append("  DROP INDEX `%s`" % target_index_name)
+                                if 'PRIMARY' == target_index_name:
+                                    alter_keys.append("  DROP PRIMARY KEY")
+                                else:
+                                    alter_keys.append("  DROP INDEX `%s`" % target_index_name)
                         # modify index
                         for index_name, statistic in source_statistics.items():
                             if index_name in target_statistics:
