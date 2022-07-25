@@ -198,7 +198,7 @@ def mysqldiff(ctx, source, target, db):
                 if source_column_data_count > 0 and target_column_data_count > 0:
                     source_columns, source_columns_pos = get_column_dic_and_pos(source_column_data_t)
                     target_columns, target_columns_pos = get_column_dic_and_pos(target_column_data_t)
-                    if source_columns_pos != target_columns_pos:
+                    if source_columns != target_columns:
                         alter_tables.append("ALTER TABLE `%s`" % source_table_name)
                         # drop column
                         for column_name, column in target_columns.items():
